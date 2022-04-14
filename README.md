@@ -1,2 +1,3 @@
 # EnergyHub
-Improving
+Hi, the project is working with maven and java 8.
+
