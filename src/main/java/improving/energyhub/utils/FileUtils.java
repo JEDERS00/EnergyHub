@@ -30,8 +30,4 @@ public class FileUtils {
         }
     }
 
-    public boolean isUncompressedFile(String path1) {
-        return "jsonl".equals(path1);
-    }
-
 }

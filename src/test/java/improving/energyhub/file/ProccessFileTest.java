@@ -1,225 +1,74 @@
 package improving.energyhub.file;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import java.util.Arrays;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 /**
  *
  * @author User
  */
+@RunWith(Parameterized.class)
 public class ProccessFileTest {
     
-    public ProccessFileTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
+    @Parameterized.Parameters
+    public static Iterable data() {
+        String invalidFileMessage = "Invalid file, please make sure your file is of type .jsonl or jsonl.gz";
+        String empty = "";
+        String result82 = "82";
+        String ambient = "ambient";
+        String ambientTemp = "ambientTemp";
+        String pathUncompressed = "src\\test\\java\\improving\\energyhub\\files\\thermostat-data.jsonl";
+        String pathCompressed = "src\\test\\java\\improving\\energyhub\\files\\thermostat-data.jsonl.gz";
+        String selectValidFormat = "Please, select a valid format date";
+        String date1 = "2016-01-01T";
+        String date2 = "2016-01-01T03:18";
+        String date3 = "201601010318";
+        String date4 = "2016/01/01/03/18";
+        String date5 = "2016//01//01//03//18";
+        
+        
+        return Arrays.asList(new Object[][]{
+            {invalidFileMessage, null, null, null}, 
+            {invalidFileMessage, empty, null, null}, 
+            {invalidFileMessage, empty, empty, null}, 
+            {invalidFileMessage, empty, empty, empty}, 
+            {invalidFileMessage, "search", empty, empty}, 
+            {invalidFileMessage, "search", "path", empty}, 
+            {invalidFileMessage, "search", "path", "date"}, 
+            {selectValidFormat, ambientTemp, pathUncompressed, date1}, 
+            {empty, ambient, pathUncompressed, date2}, 
+            {result82, ambientTemp, pathUncompressed, date2},
+            {result82, ambientTemp, pathUncompressed, date3}, 
+            {result82, ambientTemp, pathUncompressed, date4}, 
+            {result82, ambientTemp, pathUncompressed, date5}, 
+            {selectValidFormat, ambientTemp, pathCompressed, date1}, 
+            {empty, ambient, pathCompressed, date2}, 
+            {result82, ambientTemp, pathCompressed, date2}, 
+            {result82, ambientTemp, pathCompressed, date3}, 
+            {result82, ambientTemp, pathCompressed, date4}, 
+            {result82, ambientTemp, pathCompressed, date5}
+        });
     }
 
-    /**
-     * Test of processFile method, of class ProccessFile.
-     */
-    @Test
-    public void testProcessFile1() {
-        String expResult = "Invalid file, please make sure your file is of type .jsonl or jsonl.gz";
-        String result = new ProccessFile().processFile(null, null, null);
-        assertEquals(expResult, result);
+    private String expResult;
+    private String keyToSearch;
+    private String pathFile;
+    private String updateTime;
+
+    public ProccessFileTest(String expResult, String keyToSearch, String pathFile, String updateTime) {
+        this.expResult = expResult;
+        this.keyToSearch = keyToSearch;
+        this.pathFile = pathFile;
+        this.updateTime = updateTime;
     }
-    
-    /**
-     * Test of processFile method, of class ProccessFile.
-     */
+
     @Test
-    public void testProcessFile2() {
-        String expResult = "Invalid file, please make sure your file is of type .jsonl or jsonl.gz";
-        String result = new ProccessFile().processFile("", null, null);
-        assertEquals(expResult, result);
-    }
-    
-    /**
-     * Test of processFile method, of class ProccessFile.
-     */
-    @Test
-    public void testProcessFile3() {
-        String expResult = "Invalid file, please make sure your file is of type .jsonl or jsonl.gz";
-        String result = new ProccessFile().processFile("", "", null);
-        assertEquals(expResult, result);
-    }
-    
-    /**
-     * Test of processFile method, of class ProccessFile.
-     */
-    @Test
-    public void testProcessFile4() {
-        String expResult = "Invalid file, please make sure your file is of type .jsonl or jsonl.gz";
-        String result = new ProccessFile().processFile("", "", "");
-        assertEquals(expResult, result);
-    }
-    
-    /**
-     * Test of processFile method, of class ProccessFile.
-     */
-    @Test
-    public void testProcessFile5() {
-        String expResult = "Invalid file, please make sure your file is of type .jsonl or jsonl.gz";
-        String result = new ProccessFile().processFile("search", "", "");
-        assertEquals(expResult, result);
-    }
-    
-    /**
-     * Test of processFile method, of class ProccessFile.
-     */
-    @Test
-    public void testProcessFile6() {
-        String expResult = "Invalid file, please make sure your file is of type .jsonl or jsonl.gz";
-        String result = new ProccessFile().processFile("search", "path", "");
-        assertEquals(expResult, result);
-    }
-    
-    /**
-     * Test of processFile method, of class ProccessFile.
-     */
-    @Test
-    public void testProcessFile7() {
-        String expResult = "Invalid file, please make sure your file is of type .jsonl or jsonl.gz";
-        String result = new ProccessFile().processFile("search", "path", "date");
-        assertEquals(expResult, result);
-    }
-    
-    /**
-     * Test of processFile method, of class ProccessFile.
-     */
-    @Test
-    public void testProcessFile8() {
-        String expResult = "82";
-        String result = new ProccessFile().processFile("ambientTemp", "src\\test\\java\\improving\\energyhub\\files\\thermostat-data.jsonl", "2016-01-01T03:18");
-        assertEquals(expResult, result);
-    }
-    
-    /**
-     * Test of processFile method, of class ProccessFile.
-     */
-    @Test
-    public void testProcessFile9() {
-        String expResult = "";
-        String result = new ProccessFile().processFile("ambient", "src\\test\\java\\improving\\energyhub\\files\\thermostat-data.jsonl", "2016-01-01T03:18");
-        assertEquals(expResult, result);
-    }
-    
-    /**
-     * Test of processFile method, of class ProccessFile.
-     */
-    @Test
-    public void testProcessFile10() {
-        String expResult = "Please, select a valid format date";
-        String result = new ProccessFile().processFile("ambientTemp", "src\\test\\java\\improving\\energyhub\\files\\thermostat-data.jsonl", "2016-01-01T");
-        assertEquals(expResult, result);
-    }
-    
-    /**
-     * Test of processFile method, of class ProccessFile.
-     */
-    @Test
-    public void testProcessFile11() {
-        String expResult = "82";
-        String result = new ProccessFile().processFile("ambientTemp", "src\\test\\java\\improving\\energyhub\\files\\thermostat-data.jsonl", "201601010318");
-        assertEquals(expResult, result);
-    }
-    
-    /**
-     * Test of processFile method, of class ProccessFile.
-     */
-    @Test
-    public void testProcessFile12() {
-        String expResult = "82";
-        String result = new ProccessFile().processFile("ambientTemp", "src\\test\\java\\improving\\energyhub\\files\\thermostat-data.jsonl", "2016/01/01/03/18");
-        assertEquals(expResult, result);
-    }
-    
-    /**
-     * Test of processFile method, of class ProccessFile.
-     */
-    @Test
-    public void testProcessFile13() {
-        String expResult = "82";
-        String result = new ProccessFile().processFile("ambientTemp", "src\\test\\java\\improving\\energyhub\\files\\thermostat-data.jsonl", "2016//01//01//03//18");
-        assertEquals(expResult, result);
-    }
-    
-    /**
-     * Test of processFile method, of class ProccessFile.
-     */
-    @Test
-    public void testProcessFile14() {
-        String expResult = "82";
-        String result = new ProccessFile().processFile("ambientTemp", "src\\test\\java\\improving\\energyhub\\files\\thermostat-data.jsonl.gz", "2016-01-01T03:18");
-        assertEquals(expResult, result);
-    }
-    
-    /**
-     * Test of processFile method, of class ProccessFile.
-     */
-    @Test
-    public void testProcessFile15() {
-        String expResult = "";
-        String result = new ProccessFile().processFile("ambient", "src\\test\\java\\improving\\energyhub\\files\\thermostat-data.jsonl.gz", "2016-01-01T03:18");
-        assertEquals(expResult, result);
-    }
-    
-    /**
-     * Test of processFile method, of class ProccessFile.
-     */
-    @Test
-    public void testProcessFile16() {
-        String expResult = "Please, select a valid format date";
-        String result = new ProccessFile().processFile("ambientTemp", "src\\test\\java\\improving\\energyhub\\files\\thermostat-data.jsonl.gz", "2016-01-01T");
-        assertEquals(expResult, result);
-    }
-    
-    /**
-     * Test of processFile method, of class ProccessFile.
-     */
-    @Test
-    public void testProcessFile17() {
-        String expResult = "82";
-        String result = new ProccessFile().processFile("ambientTemp", "src\\test\\java\\improving\\energyhub\\files\\thermostat-data.jsonl.gz", "201601010318");
-        assertEquals(expResult, result);
-    }
-    
-    /**
-     * Test of processFile method, of class ProccessFile.
-     */
-    @Test
-    public void testProcessFile18() {
-        String expResult = "82";
-        String result = new ProccessFile().processFile("ambientTemp", "src\\test\\java\\improving\\energyhub\\files\\thermostat-data.jsonl.gz", "2016/01/01/03/18");
-        assertEquals(expResult, result);
-    }
-    
-    /**
-     * Test of processFile method, of class ProccessFile.
-     */
-    @Test
-    public void testProcessFile19() {
-        String expResult = "82";
-        String result = new ProccessFile().processFile("ambientTemp", "src\\test\\java\\improving\\energyhub\\files\\thermostat-data.jsonl.gz", "2016//01//01//03//18");
-        assertEquals(expResult, result);
+    public void testProcessFile(){
+        String result = new ProccessFile().processFile(this.keyToSearch, this.pathFile, this.updateTime);
+        assertEquals(this.expResult, result);
     }
     
 }

@@ -28,7 +28,7 @@ public class ProccessFile {
         FileUtils fileUtils = new FileUtils();
         if (fileUtils.isValidPath(pathSplit)) {
             FileFactory factory;
-            if (fileUtils.isUncompressedFile(pathSplit[pathSplit.length - 1])) {
+            if ("jsonl".equals(pathSplit[pathSplit.length - 1])) {
                 factory = new UncompresedFile();
             } else {
                 factory = new CompressedFile();
@@ -45,7 +45,6 @@ public class ProccessFile {
 
     private String getValue(String keyToSearch, Optional<BufferedReader> optionalBR, String updateTime) throws IllegalArgumentException {
         if (optionalBR.isPresent()) {
-            BufferedReader br = optionalBR.get();
             String stringLine;
             JSONObject jsonLine;
             JSONObject jsonUpdate;
@@ -56,7 +55,7 @@ public class ProccessFile {
                 Date recordTime;
                 String tmpValue = "";
                 String value;
-                try {
+                try (BufferedReader br = optionalBR.get()){
                     while ((stringLine = br.readLine()) != null) {
                         jsonLine = new JSONObject(stringLine);
                         optionalRecordTime = getOptionalDate(jsonLine.optString("updateTime"));
@@ -77,12 +76,6 @@ public class ProccessFile {
                     Logger.getLogger(ProccessFile.class.getName()).log(Level.SEVERE, null, je);
                 } catch(IOException ioE){
                     Logger.getLogger(ProccessFile.class.getName()).log(Level.SEVERE, null, ioE);
-                } finally {
-                    try {
-                        br.close();
-                    } catch (IOException ie) {
-                        Logger.getLogger(ProccessFile.class.getName()).log(Level.SEVERE, null, ie);
-                    }
                 }
             }
         }
